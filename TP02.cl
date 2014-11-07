@@ -9,21 +9,43 @@
 ; On veut à présent créer des fonctions qui puissent résoudre le problème de donner
 ; un parcours possible, que ce soit en profondeur ou en largeur d'abord.
 
+; EXPLOREPROFONDEUR : VERIFIEE, MARCHE
+; FONCTION QUI EXPLORE EN PROFONDEUR D'ABORD PUIS QUI DONNE LA PREMIERE SOLUTION OBTENUE
+
 (format t "Voici le résultat d'une recherche en profondeur d'abord.")
 
 (defun exploreProfondeur (etatActuel etatFinal)
 (let ((resultatFinal) (successeursPos) (resultat))
-(if (equal etatActuel etatFinal) (setq resultatFinal etatFinal)
+(if (equal etatActuel etatFinal) (setq resultatFinal (list etatFinal))
 (progn (setq successeursPos (successeurs etatActuel))
 (setq resultatFinal nil)
 (if (not (eq successeursPos nil))
 (progn (loop for i in successeursPos while (null resultat) do
 (setq resultat (exploreProfondeur i etatFinal)))
-(setq resultatFinal (cons etatActuel (list resultat)))
+(setq resultatFinal (cons etatActuel (car (list resultat))))
 )
 )
 ))
-(print resultatFinal)
+)
+)
+
+; EXPLORELARGEUR
+; FONCTION QU EXPLORE EN LARGEUR D'ABORD À CHAQUE NIVEAU PUIS QUI DONNE LA PREMIERE SOLUTION OBTENUE.
+
+(defun exploreLargeur (etatActuel etatFinal)
+(let ((resultatFinal) (successeursPos) (resultat) (listeSucc))
+(if (equal etatActuel etatFinal) (setq resultatFinal (list etatFinal))
+(progn (setq successeursPos (successeurs etatActuel))
+(setq resultatFinal nil)
+(if (not (eq successeursPos nil))
+(progn (setq listeSucc (loop for i in successeursPos collect (exploreLargeur i etatFinal)))
+(loop for j in listeSucc while (null resultat) do
+(setq resultat j)
+)
+(setq resultatFinal (cons etatActuel (car (list resultat))))
+)
+)
+))
 )
 )
 
