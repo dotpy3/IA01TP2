@@ -1,0 +1,56 @@
+﻿Jeu des allumettes
+
+Introduction :
+
+On veut représenter le jeu des allumettes.
+Pour citer le sujet :
+"Ce jeu se joue à deux. La situation de départ est un nombre donné d’allumettes
+(ce nombre sera appelé la dimension du jeu), associé à l’indication du joueur qui
+doit commencer le jeu. Chacun des joueurs retire alors à tour de rôle 1, 2 ou 3
+allumettes parmi les allumettes encore disponibles. Le joueur qui gagne est celui
+qui réussit à retirer la (ou les) dernière(s) allumette(s)."
+
+L'idée est de représenter ce jeu comme un espace d'états pour pouvoir en simplifier
+la résolution.
+
+1.	Soit n le nombre d'allumettes restantes ; 0 <= n <= 5.
+	Soit i le joueur qui a la main (i=1 ou i=2).
+	
+	Pour représenter un état donné en Lisp, on peut utiliser une liste à 2 éléments ;
+avec à la fois le nombre d'allumettes restantes et le joueur qui a la main.
+	
+	Voici les états possibles et leur représentation en liste Lisp :
+- n = 0, i = 1 : (0 1)
+- n = 1, i = 1 : (1 1)
+- n = 2, i = 1 : (2 1)
+- n = 3, i = 1 : (3 1)
+- n = 4, i = 1 : (4 1)
+- n = 5, i = 1 : (5 1) (un état initial possible)
+- n = 0, i = 2 : (0 2)
+- n = 1, i = 2 : (1 2)
+- n = 2, i = 2 : (2 2)
+- n = 3, i = 2 : (3 2)
+- n = 4, i = 2 : (4 2)
+- n = 5, i = 2 : (5 2) (un autre état initial possible)
+
+2.	Chaque opérateur représente les différents coups permis. Le premier élément de la
+liste est le joueur qui agit, et le second élément de la liste est le nombre d'allumettes
+qu'il retire.
+
+Opérateurs possibles lorsque le joueur qui a la main est le joueur 1 :
+- (1 1) : possible lorsqu'il reste au moins 1 allumette
+- (1 2) : possible lorsqu'il reste au moins 2 allumettes
+- (1 3) : possible lorsqu'il reste au moins 3 allumettes
+
+Opérateurs possibles lorsque le joueur qui a la main est le joueur 2 :
+- (2 1) : possible lorsqu'il reste au moins 1 allumette
+- (2 2) : possible lorsqu'il reste au moins 2 allumettes
+- (2 3) : possible lorsqu'il reste au moins 3 allumettes
+
+3.	On considère que c'est le joueur 1 qui démarre la partie.
+
+L'état initial est l'état (5 1), avec n la dimension du jeu.
+Les états finaux possibles sont les états (0 1) (celui où le dernier à avoir joué est le joueur 2, donc
+victoire du joueur 2) et (0 2) (victoire du joueur 1).
+
+4.	(insérer arbre de recherche)
