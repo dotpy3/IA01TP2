@@ -12,8 +12,6 @@
 ; EXPLOREPROFONDEUR : VERIFIEE, MARCHE
 ; FONCTION QUI EXPLORE EN PROFONDEUR D'ABORD PUIS QUI DONNE LA PREMIERE SOLUTION OBTENUE
 
-(format t "Voici le résultat d'une recherche en profondeur d'abord.")
-
 (defun exploreProfondeur (etatActuel etatFinal)
 (let ((resultatFinal) (successeursPos) (resultat))
 (if (equal etatActuel etatFinal) (setq resultatFinal (list etatFinal))
@@ -28,6 +26,32 @@
 ))
 )
 )
+
+; EXPLOREPROFONDEURTOUS : SOUCIS D'AFFICHAGE
+; FONCTION QUI EXPLORE EN PROFONDEUR D'ABORD PUIS QUI DONNE TOUTES LES SOLUTIONS OBTENUES
+
+(defun exploreProfondeurTous (ei ef)
+	(if (equal ei ef) (list ef)
+		(let ((successeursPos) (resultat) (solutions))
+			(setq successeursPos (successeurs ei))
+			(if (not (null successeursPos))
+				(progn
+					(loop for i in successeursPos do
+						(setq resultat (exploreProfondeurTous i ef))
+						(if (not (null resultat))
+							(setq solutions (cons (loop for j in resultat collect (cons ei j)) solutions))
+						)
+					)
+				solutions
+					
+				)
+			nil
+			)
+		)
+	)
+)
+
+(((5 1) ((2 2) ((1 1) (0 2)))) ((5 1) ((3 2) ((1 1) (0 2))) ((3 2) ((2 1) (0 2)))) ((5 1) ((4 2) ((1 1) (0 2))) ((4 2) ((2 1) (0 2))) ((4 2) ((3 1) (0 2)) ((3 1) ((2 2) ((1 1) (0 2)))))))
 
 ; EXPLORELARGEUR
 ; FONCTION QU EXPLORE EN LARGEUR D'ABORD À CHAQUE NIVEAU PUIS QUI DONNE LA PREMIERE SOLUTION OBTENUE.
@@ -98,3 +122,19 @@ opePossible)
 (loop for i in opePossibles
 collect (list (- (car etatActuel) (cadr i)) (+ (mod (+ 1 (- (cadr etatActuel) 1)) 2) 1)))
 )
+
+; AFFICHAGE1LISTE : NE MARCHE PAS
+; prend en paramètre une liste d'états, et réalise un affichage de la partie
+
+(defun affichage1liste (ll)
+(format t (concatenate 'string "On commence la partie avec " (string (car (car ll))) " allumettes. Le joueur " (string (cadr (car ll))) " commence."))
+(loop for i in (cdr ll) do
+	(format t (concatenate 'string "Le joueur " (string (+ (mod (+ 1 (- (cadr i) 1)) 2) 1)) " joue. Il reste " (string (car i)) " allumettes."))
+)
+)
+
+; AFFICHAGE1SOLUTION
+; prend en paramètre un état initial et un état final, affiche l'exploration en profondeur d'abord de ce problème
+
+(defun affichage1solution (ei ef)
+(affichage1liste (exploreProfondeur ei ef)))
