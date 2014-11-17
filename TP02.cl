@@ -27,30 +27,6 @@
 )
 )
 
-; EXPLOREPROFONDEURTOUS : SOUCIS D'AFFICHAGE
-; FONCTION QUI EXPLORE EN PROFONDEUR D'ABORD PUIS QUI DONNE TOUTES LES SOLUTIONS OBTENUES
-
-(defun exploreProfondeurTous (ei ef)
-	(if (equal ei ef) (list ef)
-		(let ((successeursPos) (resultat) (solutions))
-			(setq successeursPos (successeurs ei))
-			(if (not (null successeursPos))
-				(progn
-					(loop for i in successeursPos do
-						(setq resultat (exploreProfondeurTous i ef))
-						(if (not (null resultat))
-							(setq solutions (cons (loop for j in resultat collect (cons ei j)) solutions))
-						)
-					)
-				solutions
-					
-				)
-			nil
-			)
-		)
-	)
-)
-
 (((5 1) ((2 2) ((1 1) (0 2)))) ((5 1) ((3 2) ((1 1) (0 2))) ((3 2) ((2 1) (0 2)))) ((5 1) ((4 2) ((1 1) (0 2))) ((4 2) ((2 1) (0 2))) ((4 2) ((3 1) (0 2)) ((3 1) ((2 2) ((1 1) (0 2)))))))
 
 ; EXPLORELARGEUR
@@ -127,10 +103,13 @@ collect (list (- (car etatActuel) (cadr i)) (+ (mod (+ 1 (- (cadr etatActuel) 1)
 ; prend en paramètre une liste d'états, et réalise un affichage de la partie
 
 (defun affichage1liste (ll)
-(format t (concatenate 'string "On commence la partie avec " (string (car (car ll))) " allumettes. Le joueur " (string (cadr (car ll))) " commence."))
+(format t "On commence la partie avec ~a allumettes. Le joueur ~a commence." (cadr (car ll)) (car (car ll)))
+(print ">") ; saut de ligne
 (loop for i in (cdr ll) do
-	(format t (concatenate 'string "Le joueur " (string (+ (mod (+ 1 (- (cadr i) 1)) 2) 1)) " joue. Il reste " (string (car i)) " allumettes."))
-)
+	(progn (format t "Le joueur ~a joue. Il reste ~a allumettes." (cadr i) (car i)))
+	(print ">"))
+(format t "Le joueur ~a est le dernier à jouer. Il a donc perdu la partie." (cadr (nth (- (length ll) 1) ll)))
+(cadr (nth (- (length ll) 2) ll))
 )
 
 ; AFFICHAGE1SOLUTION
